@@ -79,7 +79,7 @@ def adjust_coordinates(latitude, longitude, offset):
 def setup_firefox_driver(geckodriver_path, firefox_binary_path):
     options = Options()
     options.binary_location = firefox_binary_path
-    options.headless = True
+    # options.headless = True
     service = Service(geckodriver_path)
     driver = webdriver.Firefox(service=service, options=options)
     return driver

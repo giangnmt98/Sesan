@@ -9,13 +9,14 @@ from evaluate import evaluate_forecast, plot_forecast_comparison
 
 def main():
     parser = argparse.ArgumentParser(description="Chạy mô hình dự báo chuỗi thời gian.")
-    parser.add_argument("--file_path", type=str, required=False, help="Đường dẫn tới file CSV.", default="data/data_sample_for_forcasting.csv")
+    parser.add_argument("--file_path", type=str, required=False, help="Đường dẫn tới file CSV.", default="data/data_luu_luong_processed.csv")
     parser.add_argument("--method", type=str, required=False, choices=["arima", "prophet", "autoencoder", "lstm"], help="Mô hình dự báo.", default="autoencoder")
-    parser.add_argument("--split_date", type=str, help="Ngày chia tập dữ liệu (YYYY-MM-DD).")
+    parser.add_argument("--split_date", type=str, help="Ngày chia tập dữ liệu (YYYY-MM-DD).", default="2024-11-30")
     args = parser.parse_args()
 
-    # data = load_data(args.file_path)
-    data = generate_data(n_samples=1000)
+    data = load_data(args.file_path)
+    data =  data[data['Value'] >= 0]
+    # data = generate_data(n_samples=1000)
 
     train, test = split_data(data, split_date=args.split_date)
     plot_train_test(train, test)

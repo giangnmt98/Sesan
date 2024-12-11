@@ -29,7 +29,7 @@ class Autoencoder(nn.Module):
         decoded = self.decoder(encoded)
         return decoded
 
-def autoencoder_forecasting(train, test, encoding_dim=100, epochs=100, batch_size=16, learning_rate=0.0001):
+def autoencoder_forecasting(train, test, encoding_dim=200, epochs=2000, batch_size=16, learning_rate=0.0001):
     """
     Dự báo dữ liệu sử dụng Autoencoder.
     Args:
@@ -46,10 +46,10 @@ def autoencoder_forecasting(train, test, encoding_dim=100, epochs=100, batch_siz
     train_values = train['Value'].values
     test_values = test['Value'].values
     scaler = (train_values.min(), train_values.max())
-    # train_scaled = (train_values - scaler[0]) / (scaler[1] - scaler[0])
-    # test_scaled = (test_values - scaler[0]) / (scaler[1] - scaler[0])
-    train_scaled = train_values
-    test_scaled = test_values
+    train_scaled = (train_values - scaler[0]) / (scaler[1] - scaler[0])
+    test_scaled = (test_values - scaler[0]) / (scaler[1] - scaler[0])
+    # train_scaled = train_values
+    # test_scaled = test_values
 
     # Sử dụng kích thước ngắn nhất cho Autoencoder
     input_dim = min(len(train_scaled), len(test_scaled))
@@ -83,3 +83,27 @@ def autoencoder_forecasting(train, test, encoding_dim=100, epochs=100, batch_siz
 
     forecast = reconstructed * (scaler[1] - scaler[0]) + scaler[0]
     return forecast
+#
+# def objective(trial):
+#
+#     # Invoke suggest methods of a Trial object to generate hyperparameters.
+#     regressor_name = trial.suggest_categorical('regressor', ['SVR', 'RandomForest'])
+#     if regressor_name == 'SVR':
+#         svr_c = trial.suggest_float('svr_c', 1e-10, 1e10, log=True)
+#         regressor_obj = sklearn.svm.SVR(C=svr_c)
+#     else:
+#         rf_max_depth = trial.suggest_int('rf_max_depth', 2, 32)
+#         regressor_obj = sklearn.ensemble.RandomForestRegressor(max_depth=rf_max_depth)
+#
+#     X, y = sklearn.datasets.fetch_california_housing(return_X_y=True)
+#     X_train, X_val, y_train, y_val = sklearn.model_selection.train_test_split(X, y, random_state=0)
+#
+#     regressor_obj.fit(X_train, y_train)
+#     y_pred = regressor_obj.predict(X_val)
+#
+#     error = sklearn.metrics.mean_squared_error(y_val, y_pred)
+#
+#     return error  # An objective value linked with the Trial object.
+#
+# study = optuna.create_study()  # Create a new study.
+# study.optimize(objective, n_trials=100)  # Invoke optimization of the objective function.
