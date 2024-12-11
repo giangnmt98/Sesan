@@ -1,1 +1,1 @@
-# Source code thực hành cho Công ty Phát triển Thủy điên Sê San
+# Source code thực hành cho Công ty Phát triển Thủy điện Sê San
